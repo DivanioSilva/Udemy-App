@@ -3,7 +3,6 @@ import {IProduct} from "./product";
 import {ProductService} from "../services/product.service";
 
 @Component({
-  selector: 'pm-products',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
