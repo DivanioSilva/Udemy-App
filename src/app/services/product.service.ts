@@ -1,43 +1,31 @@
 import { Injectable } from '@angular/core';
 import {IProduct} from "../products/product";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {catchError, Observable, tap, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+  private productUrl = "http://localhost:8081/api/products";
 
-  getProducts(): IProduct[] {
-    return [
-      {
-        "productId": 2,
-        "productName": "Garden Cart",
-        "productCode": "GND-0023",
-        "releaseDate": "March 18, 2021",
-        "description": "15 gallon capacity rolling garden cart",
-        "price": 32.99,
-        "starRating": 3.2,
-        "imageUrl": "assets/images/gardenCart2.jpeg"
-      },
-      {
-        "productId": 5,
-        "productName": "Hammer",
-        "productCode": "TBX-0048",
-        "releaseDate": "May 21, 2021",
-        "description": "Curved claw steel hammer",
-        "price": 8.9,
-        "starRating": 4.8,
-        "imageUrl": "assets/images/hammer.jpeg"
-      },
-      {
-        "productId": 6,
-        "productName": "Brick",
-        "productCode": "BBR-0073",
-        "releaseDate": "Juny 24, 2022",
-        "description": "Wall brick",
-        "price": 0.57,
-        "starRating": 5.0,
-        "imageUrl": "assets/images/brick.jpeg"
-      }
-    ];
+  constructor(private http: HttpClient){}
+
+  getProducts(): Observable<IProduct[]> {
+    return this.http.get<IProduct[]>(this.productUrl).pipe(
+      tap(data => console.log("All", JSON.stringify(data))),
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    let errorMessage = "";
+    if(err.error instanceof ErrorEvent) {
+      errorMessage = `An error occurred" ${err.error.message}`;
+    } else {
+      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(()=> errorMessage);
   }
 }
