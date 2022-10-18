@@ -11,7 +11,8 @@ export class ProductListComponent implements OnInit {
   imageWidth = 50;
   imageMargin = 2;
   showImage = false;
-  listFilter = "cart";
+  private _listFilter: string = "";
+  filteredProduct: IProduct[] = [];
 
   products: IProduct[] = [
     {
@@ -56,4 +57,19 @@ export class ProductListComponent implements OnInit {
     this.showImage = !this.showImage;
   }
 
+  get listFilter(): string {
+    return this._listFilter;
+  }
+
+  set listFilter(value: string) {
+    console.log("In setter: ", value)
+    this._listFilter = value;
+    this.filteredProduct = this.performFilter(value);
+  }
+
+  private performFilter(filterBy: string): IProduct[] {
+    filterBy = filterBy.toLowerCase();
+    return this.products.filter((product: IProduct) =>
+      product.productName.toLocaleLowerCase().includes(filterBy));
+  }
 }
