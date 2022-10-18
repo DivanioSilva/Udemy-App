@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {IProduct} from "./product";
+import {ProductService} from "../services/product.service";
 
 @Component({
   selector: 'pm-products',
@@ -13,44 +14,14 @@ export class ProductListComponent implements OnInit {
   showImage = false;
   private _listFilter: string = "";
   filteredProduct: IProduct[] = [];
+  products: IProduct[] = [];
 
-  products: IProduct[] = [
-    {
-      "productId": 2,
-      "productName": "Garden Cart",
-      "productCode": "GND-0023",
-      "releaseDate": "March 18, 2021",
-      "description": "15 gallon capacity rolling garden cart",
-      "price": 32.99,
-      "starRating": 4.2,
-      "imageUrl": "assets/images/gardenCart2.jpeg"
-    },
-    {
-      "productId": 5,
-      "productName": "Hammer",
-      "productCode": "TBX-0048",
-      "releaseDate": "May 21, 2021",
-      "description": "Curved claw steel hammer",
-      "price": 8.9,
-      "starRating": 4.8,
-      "imageUrl": "assets/images/hammer.jpeg"
-  },
-  {
-    "productId": 6,
-    "productName": "Brick",
-    "productCode": "BBR-0073",
-    "releaseDate": "Juny 24, 2022",
-    "description": "Wall brick",
-    "price": 0.57,
-    "starRating": 5.0,
-    "imageUrl": "assets/images/brick.jpeg"
-  }
-  ];
-  constructor() { }
-
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     console.log("In OnInit")
+    this.products = this.productService.getProducts();
+    this.filteredProduct = this.products;
   }
 
   toggleImages(): void {
